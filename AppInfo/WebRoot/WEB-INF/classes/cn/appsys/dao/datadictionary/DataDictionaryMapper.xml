@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.appsys.dao.datadictionary.DataDictionaryMapper">
+
+	<select id="getDataDictionaryList" resultType="DataDictionary">
+		select * from  data_dictionary
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="typeCode != null">
+				and typeCode = #{typeCode}
+			</if>
+		</trim>
+		<!-- order by creationDate DESC  -->
+	</select>
+	
+	<select id="getDataDictionaryListInfo" resultType="DataDictionary">
+	    select*from data_dictionary
+	    <trim prefix="where" prefixOverrides="and | or">
+	       <if test="typeName!=null and typeName!=''">
+	           and typeName like CONCAT('%',#{typeName},'%')
+	       </if>
+	    </trim>
+	    order by creationDate DESC limit #{from},#{pageSize}
+	</select>
+	
+	<select id="getDataDictionaryCount" resultType="Int">
+		select count(*) as count from data_dictionary
+			<trim prefix="where" prefixOverrides="and | or">
+				<if test="typeName!=null and typeName!=''">
+					and typeName like CONCAT ('%',#{typeName},'%')
+				</if>
+			</trim>
+	</select>
+	
+	<select id="getTypeName" resultType="DataDictionary">
+	   select typeName from data_dictionary where typeCode=#{typeCode}
+	</select>
+	
+</mapper>

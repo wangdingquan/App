@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.appsys.dao.devuser.DevUserMapper">
+	<select id="getLoginUser" resultType="DevUser">
+		select u.* from dev_user u
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="devCode != null">
+				and u.devCode = #{devCode}
+			</if>
+		</trim>
+	</select>
+	
+	<insert id="AddDevUser" parameterType="DevUser">
+	  insert into dev_user(devCode,devName,devPassword,devEmail,devInfo,createdBy,creationDate,modifyBy,modifyDate)
+	  values(#{devCode},#{devName},#{devPassword},#{devEmail},#{devInfo},#{createdBy},#{creationDate},#{modifyBy},#{modifyDate});
+	</insert>
+	
+	
+	<select id="getDevUserInfoList" resultType="DevUser" parameterType="String">
+	   select*from dev_user
+	   <trim prefix="where" prefixOverrides="and | or">
+			<if test="devName != null and devName != ''">
+				and devName like CONCAT ('%',#{devName},'%')
+			</if>
+		</trim>
+		order by creationDate DESC limit #{from},#{pageSize}
+	</select>
+	
+		<select id="getDevUserCount" resultType="Int">
+		select count(*) as count from dev_user
+			<trim prefix="where" prefixOverrides="and | or">
+				<if test="devName != null and devName != ''">
+					and devName like CONCAT ('%',#{devName},'%')
+				</if>
+			</trim>
+	</select>
+	
+	<select id="getDevUserInfoById" parameterType="Integer" resultType="DevUser">
+	  select*from dev_user where id=#{id}
+	</select>
+	
+	<update id="modify" parameterType="DevUser">
+	   update dev_user set devCode=#{devCode},devName=#{devName},devPassword=#{devPassword},devEmail=#{devEmail},devInfo=#{devInfo},createdBy=#{createdBy},creationDate=#{creationDate}
+	   where id=#{id}
+	</update> 
+	
+	<delete id="delDevUserInfo" parameterType="Integer">
+	  delete from dev_user
+	  where id=#{id}
+	</delete>
+	
+	<select id="getDevUserName" resultType="DevUser">
+	   select*from dev_user where devCode=#{devCode}
+	</select>
+	
+	<insert id="add" parameterType="DevUser">
+	   insert into dev_user(devCode,devName,devPassword,devEmail,devInfo,createdBy,creationDate)
+	   values(#{devCode},#{devName},#{devPassword},#{devEmail},#{devInfo},#{createdBy},#{creationDate});
+	</insert>
+</mapper>
